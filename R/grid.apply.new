@@ -142,7 +142,7 @@ if(check){
   jobs[[thisJob]]<- job 
   newGrid$gridJobs <- jobs
   .grid=newGrid  ##ok here???
-  assign(".grid",newGrid, loadNamespace("GridR"))
+  assign(".grid",newGrid, loadNamespace("GridRLocal"))
   
   if(.grid$schedulerMode)
   #create connection to scheduler
@@ -438,7 +438,7 @@ else
 	newgrid = .grid
 	newgrid$gridJobs[[thisJob]]$id =recId[1]
 	#cat(newgrid$gridJobs[[thisJob]]$id, " job: ", thisJob, "\n")
-	assign(".grid",newgrid, loadNamespace("GridR"))
+	assign(".grid",newgrid, loadNamespace("GridRLocal"))
 	
 	if(wait)
 		grid.callback()
