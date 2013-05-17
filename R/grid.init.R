@@ -249,9 +249,9 @@ if(is.null(.grid$service)){
 	cat("service is not specified. Check Config File and Parameters\n wrong service, availible services are: local, condor.ssh, remote.ssh, globus.cog and variableSharing\n")
 	return(FALSE)
 }
-if(!(.grid$service=="condor.ssh" ||.grid$service=="local" || .grid$service=="condor.local" || .grid$service =="remote.ssh" || .grid$service=="globus.cog" || .grid$service=="globus.ssh" ||.grid$service=="variableSharing"))
+if(!(.grid$service=="condor.ssh" ||.grid$service=="local" || .grid$service=="condor.local" || .grid$service=="bosco.direct" || .grid$service =="remote.ssh" || .grid$service=="globus.cog" || .grid$service=="globus.ssh" ||.grid$service=="variableSharing"))
 {
-	cat("wrong service, availible services are: local, condor.local, condor.ssh, remote.ssh, globus.cog, globus.ssh(only scheduler Mode!) and variableSharing\n")
+	cat("wrong service, availible services are: local, condor.local, bosco.direct, condor.ssh, remote.ssh, globus.cog, globus.ssh(only scheduler Mode!) and variableSharing\n")
 	return(FALSE)
 }
 err=FALSE
@@ -295,7 +295,7 @@ if (is.null(.grid$ssh$key) && Sys.info()["sysname"]=="Windows" && (.grid$service
 	cat("sshKey is not specified. Check Config File and Parameters\n")
 	err=TRUE
 }
-if((.grid$service=="condor.ssh" || .grid$servic=="condor.local") && is.null(.grid$remoteRPath))
+if((.grid$service=="condor.ssh" || .grid$service=="condor.local" || .grid$service=="bosco.direct") && is.null(.grid$remoteRPath))
 	.grid$remoteRPath="/usr/bin/R"
 
 if(err)
