@@ -90,6 +90,7 @@ function(plots, yName, psName, fName, remScriptName, remMainName,remMainNameOut,
 `grid.makeSshAndBoscoFiles` <-
 function(plots, yName, psName, fName, remScriptName, remMainName,remMainNameOut, varlist, cmd, onlyssh, check, batch=FALSE) {
 	errName<- paste(.grid$uniqueName,"-err",sep="")
+    outName<- paste(.grid$uniqueName,"-out",sep="")
 	condorName<-paste(.grid$uniqueName,"-script.condor",sep="")
 	
 	#remote script which loads libraries, checks if all functions and variables exist and then executes the main function. result is written to y
@@ -135,6 +136,7 @@ function(plots, yName, psName, fName, remScriptName, remMainName,remMainNameOut,
             transfer_executable = False
 			arguments      = CMD BATCH --vanilla --slave ",remScriptName,"
 			Error          = ",errName,"
+            Output         = ",outName,"
 			transfer_input_files =",remScriptName,",",fName, "
             transfer_output_files =",yName, "
             environment = \\\"PATH=$PATH:~/bosco/R/bin R_ROOT_DIR=~/bosco/R RHOME=${R_ROOT_DIR} \\\" ",
@@ -150,7 +152,7 @@ function(plots, yName, psName, fName, remScriptName, remMainName,remMainNameOut,
 			write.table(paste(\"Condor:\", grep(\"^ERROR:\", out, value=TRUE)),file=\"", yName,"\",quote=FALSE,row.names=FALSE,col.names=FALSE)}
 			if(any(grep(\"^WARNING:\", out))) {
 			write.table(paste(\"Condor:\", grep(\"^WARNING:\", out, value=TRUE)),file=\"", yName,"\",quote=FALSE,row.names=FALSE,col.names=FALSE)}
-			while(!file.exists(\"",yName,"\")){
+			while(!file.exists(\"",yName,"\") || file.info(\"",yName,"\")$size==0){
 			err=scan(file=\"",errName,"\", what=character(0), quiet=TRUE )
 			if(length(err)>0) {
 				write.table(paste(\"Condor error: \",err, sep=\"\"), file=\"", yName,"\",quote=FALSE,row.names=FALSE,col.names=FALSE)}
