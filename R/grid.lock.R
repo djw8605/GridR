@@ -35,8 +35,9 @@ function(varName){
     #}&& length(x)==0
 	text <- paste(functionname,"<- function(...){
 								grid.callback()
-								if(!(length(list(...))==0 && any(get(\".grid\", loadNamespace(\"GridR\"))$changed==varName)))
-									stop(paste(\"Object\",varName,\"has write lock from grid function\"))
+								if(!(length(list(...))==0 && any(get(\".grid\", loadNamespace(\"GridR\"))$changed==varName))) {
+									#stop(paste(\"Object\",varName,\"has write lock from grid function\"))
+                                }
 								else
 								{
 									eval(parse(text=varName))
