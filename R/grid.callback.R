@@ -137,7 +137,7 @@ function(...){
       filename <- paste(.grid$localDir,jobs[[i]]$name,"-y.dat",sep="")
       remOutput= paste(jobs[[i]]$name,"-y.dat",sep="")
 	  
-   if(file.exists(filename)){
+   if(file.exists(filename) && file.info(filename)$size!=0){
 	   if(file.info(filename)$size==0){
  	     Sys.sleep(1)
 	 }
