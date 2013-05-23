@@ -219,7 +219,7 @@ if(.grid$service=="condor.local")
 
 
 ########################################### bosco direct  #############################################
-if(.grid$service=="bosco.direct")
+else if(.grid$service=="bosco.direct")
 {
   .grid$debug=TRUE
   if(is.null(batch)) {
