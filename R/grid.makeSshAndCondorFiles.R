@@ -137,8 +137,8 @@ function(plots, yName, psName, fName, remScriptName, remMainName,remMainNameOut,
 			Error          = ",errName,"
             Output         = ",outName,"
 			transfer_input_files =",remScriptName,",",fName, "
-            transfer_output_files =",yName, "
-            environment = \\\"PATH=$PATH:~/bosco/R/bin R_ROOT_DIR=~/bosco/R RHOME=${R_ROOT_DIR} \\\" ",
+            transfer_output_files =",yName, 
+            #environment = \\\"PATH=$PATH:~/bosco/R/bin R_ROOT_DIR=~/bosco/R RHOME=${R_ROOT_DIR} \\\" ",
 			#"\ntransfer_files = ALWAYS",
 			"\nQueue\", sep=\"\")
 			write.table(condorScript,\"", condorName,"\",quote=FALSE,row.names=FALSE,col.names=FALSE)
