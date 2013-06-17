@@ -186,7 +186,8 @@ def runR(r_dir):
 def main():
     # Blahp, in it's infinite wisdom, redfines the $HOME directory
     # We have to get the actual $HOME directory
-    del os.environ["HOME"]
+    if os.environ.has_key("HOME"):
+        del os.environ["HOME"]
     home_dir = expanduser("~")
     install_dir = findInstallDir(home_dir)
     r_dir = os.path.join(install_dir, "bosco", "R")
