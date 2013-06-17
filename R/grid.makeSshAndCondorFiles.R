@@ -129,7 +129,7 @@ function(plots, yName, psName, fName, remScriptName, remMainName,remMainNameOut,
 	if(!onlyssh && batch==FALSE) {
 	
 	  # create R script which submits the job to condor and waits until the file yName exists
-		remMainScript=paste("condorScript=paste(\"Executable     = ", system.file(package="GridR", "GridR", "R-bootstrap.sh"), "
+		remMainScript=paste("condorScript=paste(\"Executable     = ", system.file(package="GridR", "GridR", "R-bootstrap.py"), "
 			Universe       = grid
 			should_transfer_files = YES
 			when_to_transfer_output = ON_EXIT
