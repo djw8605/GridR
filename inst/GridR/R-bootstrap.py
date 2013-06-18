@@ -158,7 +158,9 @@ def installR(install_dir):
     
     # Untar
     tar = tarfile.open(tar_name, 'r')
-    tar.extractall(tmp_dir)
+    for tarname in tar.getnames():
+        tar.extract(tarname, tmp_dir)
+    tar.close()
     
     # Ok, now move the R installation into the correct directory
     tmp_r_dir = os.path.join(tmp_dir, 'R')
