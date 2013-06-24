@@ -16,8 +16,8 @@ All needed functions and variables that are necessary to execute that function w
 \tabular{ll}{
 Package: \tab GridR\cr
 Type: \tab Package\cr
-Version: \tab 0.9.1\cr
-Date: \tab 2009-01-30\cr
+Version: \tab 0.9.4\cr
+Date: \tab 2013-06-24\cr
 License: \tab GPL-2\cr
 }
 With grid.init(...) GridR is initialized.
@@ -36,6 +36,8 @@ With grid.share you can share functions and variables with other users on your c
 Malte Lohmeyer
 Dennis Wegener
 Stefan Rueping
+Derek Weitzel
+Alex Storer
 }
 \keyword{ package }
 \seealso{
