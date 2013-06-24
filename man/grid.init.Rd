@@ -95,6 +95,11 @@ You must enter at least the following lines to the config file or command line:\
 <REMOTERPATH>pathToRemoteR</REMOTERPATH>\# if R is not linked to /usr/bin/R on serverside, please add this Tag here
 </GRIDR>								\# end tag\cr
 
+
+\code{bosco.local}
+
+the function is submitted locally to the machine running the R instance.  It is customized to use Bosco mechanisms to remotely install R on the remote resources. \cr
+
 \code{scheduler}
 if the variable schedulerIp is set, all jobs are started with the use of a scheduler. 
 At grid.init() it is checked if there are jobs which are started earlier from another R Session. 
