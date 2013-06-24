@@ -1,9 +1,9 @@
 Package: GridR
 Type: Package
 Title: Executes functions on remote hosts, clusters or grids. 
-Version: 0.9.3
-Date: 2013-05-28
-Author: Dennis Wegener, Malte Lohmeyer, Stefan Rueping
+Version: 0.9.4
+Date: 2013-06-24
+Author: Dennis Wegener, Malte Lohmeyer, Stefan Rueping, Derek Weitzel
 Maintainer: Dennis Wegener <dennis.wegener@iais.fraunhofer.de>
 Description: GridR is an R-Package that can be used to submit R functions for execution on remote computers, clusters or grids. In addition, users are provided with an interface to share variables and functions with other users.
 License: GPL-2
