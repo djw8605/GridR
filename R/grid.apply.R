@@ -176,90 +176,6 @@ if(.grid$service=="local")
 	}
 }
 
-########################################### local condor  #############################################
-if(.grid$service=="condor.local")
-{
-  .grid$debug=TRUE
-  if(is.null(batch)) {
-        grid.makeSshAndCondorFiles(plots, yName, psName, fName, remScriptName, scriptName, paste(scriptName, "out",sep=""), varlist, cmd, FALSE, check)	
-	if(wait) {
-		if(.grid$debug)
-			cat("starting condor.local mode\n")
-		system(paste(.grid$remoteRPath, " CMD BATCH --vanilla ", scriptName, sep=""))
-		grid.callback()
-	}
-	else {
-		if(.grid$debug)
-			cat("starting condor.local mode\n")
-		grid.lock(grid.input.Parameters.y)
-		system(paste(.grid$remoteRPath, " CMD BATCH --vanilla ", scriptName, sep=""), wait=FALSE)		
-	}
-      }
-  else {
-    grid.makeRemRFile(plots, scriptName, psName, varlist, cmd, check, outputFile=yName, remLibFilename=fName)
-		if(wait) {
-			# start remote script and copy file back
-			#system(paste(.grid$remoteRPath," CMD BATCH --vanilla ", scriptName,"\"", sep=""))
-			system(paste(.grid$remoteRPath," CMD BATCH --vanilla ", scriptName, sep=""))                        
-			grid.callback()
-			#delete remote files
-			if(!.grid$debug)
-				system(paste("rm ",.grid$uniqueName,"*",sep=""),intern=TRUE)
-		}
-		else {
-			grid.lock(grid.input.Parameters.y)
-			#start remote script
-			#system(paste(.grid$remoteRPath," CMD BATCH --vanilla ", scriptName,"\"", sep=""))#, intern=TRUE)
-			system(paste(.grid$remoteRPath," CMD BATCH --vanilla ", scriptName, sep=""))#, intern=TRUE)                        
-			grid.waitSshResultFile(yName, paste(scriptName, "out", sep=""))
-			system(paste(R.home(component="bin"), "/R CMD BATCH --vanilla --slave ",paste(.grid$uniqueName, "-waitForReturn.R",sep=""), " &", sep=""))
-		}
-	}
-}
-
-
-########################################### bosco direct  #############################################
-else if(.grid$service=="bosco.direct")
-{
-  .grid$debug=TRUE
-  if(is.null(batch)) {
-        grid.makeSshAndBoscoFiles(plots, yName, psName, fName, remScriptName, scriptName, paste(scriptName, "out",sep=""), varlist, cmd, FALSE, check)	
-	if(wait) {
-		if(.grid$debug)
-			cat("starting bosco.direct mode\n")
-		system(paste(.grid$remoteRPath, " CMD BATCH --vanilla ", scriptName, sep=""))
-		grid.callback()
-	}
-	else {
-		if(.grid$debug)
-			cat("starting bosco.direct mode\n")
-		grid.lock(grid.input.Parameters.y)
-		system(paste(.grid$remoteRPath, " CMD BATCH --vanilla ", scriptName, sep=""), wait=FALSE)		
-	}
-      }
-  else {
-    grid.makeRemRFile(plots, scriptName, psName, varlist, cmd, check, outputFile=yName, remLibFilename=fName)
-		if(wait) {
-			# start remote script and copy file back
-			#system(paste(.grid$remoteRPath," CMD BATCH --vanilla ", scriptName,"\"", sep=""))
-			system(paste(.grid$remoteRPath," CMD BATCH --vanilla ", scriptName, sep=""))                        
-			grid.callback()
-			#delete remote files
-			if(!.grid$debug)
-				system(paste("rm ",.grid$uniqueName,"*",sep=""),intern=TRUE)
-		}
-		else {
-			grid.lock(grid.input.Parameters.y)
-			#start remote script
-			#system(paste(.grid$remoteRPath," CMD BATCH --vanilla ", scriptName,"\"", sep=""))#, intern=TRUE)
-			system(paste(.grid$remoteRPath," CMD BATCH --vanilla ", scriptName, sep=""))#, intern=TRUE)                        
-			grid.waitSshResultFile(yName, paste(scriptName, "out", sep=""))
-			system(paste(R.home(component="bin"), "/R CMD BATCH --vanilla --slave ",paste(.grid$uniqueName, "-waitForReturn.R",sep=""), " &", sep=""))
-		}
-	}
-}
-
-
 
 ##########################non-scheduler modes:
 ########################################### remote.ssh #############################################
@@ -324,7 +240,91 @@ else{#windows
 	}
 	
 }
-	
+
+########################################### local condor  #############################################
+else if(.grid$service=="condor.local")
+{
+  .grid$debug=TRUE
+  if(is.null(batch)) {
+        grid.makeSshAndCondorFiles(plots, yName, psName, fName, remScriptName, scriptName, paste(scriptName, "out",sep=""), varlist, cmd, FALSE, check)	
+	if(wait) {
+		if(.grid$debug)
+			cat("starting condor.local mode\n")
+		system(paste(.grid$remoteRPath, " CMD BATCH --vanilla ", scriptName, sep=""))
+		grid.callback()
+	}
+	else {
+		if(.grid$debug)
+			cat("starting condor.local mode\n")
+		grid.lock(grid.input.Parameters.y)
+		system(paste(.grid$remoteRPath, " CMD BATCH --vanilla ", scriptName, sep=""), wait=FALSE)		
+	}
+      }
+  else {
+    grid.makeRemRFile(plots, scriptName, psName, varlist, cmd, check, outputFile=yName, remLibFilename=fName)
+		if(wait) {
+			# start remote script and copy file back
+			#system(paste(.grid$remoteRPath," CMD BATCH --vanilla ", scriptName,"\"", sep=""))
+			system(paste(.grid$remoteRPath," CMD BATCH --vanilla ", scriptName, sep=""))                        
+			grid.callback()
+			#delete remote files
+			if(!.grid$debug)
+				system(paste("rm ",.grid$uniqueName,"*",sep=""),intern=TRUE)
+		}
+		else {
+			grid.lock(grid.input.Parameters.y)
+			#start remote script
+			#system(paste(.grid$remoteRPath," CMD BATCH --vanilla ", scriptName,"\"", sep=""))#, intern=TRUE)
+			system(paste(.grid$remoteRPath," CMD BATCH --vanilla ", scriptName, sep=""))#, intern=TRUE)                        
+			grid.waitSshResultFile(yName, paste(scriptName, "out", sep=""))
+			system(paste(R.home(component="bin"), "/R CMD BATCH --vanilla --slave ",paste(.grid$uniqueName, "-waitForReturn.R",sep=""), " &", sep=""))
+		}
+	}
+}
+
+########################################### bosco direct  #############################################
+else if(.grid$service=="bosco.direct")
+{
+  .grid$debug=TRUE
+  if(is.null(batch)) {
+        grid.makeSshAndBoscoFiles(plots, yName, psName, fName, remScriptName, scriptName, paste(scriptName, "out",sep=""), varlist, cmd, FALSE, check)
+        if(wait) {
+                if(.grid$debug)
+                        cat("starting bosco.direct mode\n")
+                system(paste(.grid$remoteRPath, " CMD BATCH --vanilla ", scriptName, sep=""))
+                grid.callback()
+        }
+        else {
+                if(.grid$debug)
+                        cat("starting bosco.direct mode\n")
+                grid.lock(grid.input.Parameters.y)
+                system(paste(.grid$remoteRPath, " CMD BATCH --vanilla ", scriptName, sep=""), wait=FALSE)
+        }
+      }
+  else {
+    grid.makeRemRFile(plots, scriptName, psName, varlist, cmd, check, outputFile=yName, remLibFilename=fName)
+                if(wait) {
+                        # start remote script and copy file back
+                        #system(paste(.grid$remoteRPath," CMD BATCH --vanilla ", scriptName,"\"", sep=""))
+                        system(paste(.grid$remoteRPath," CMD BATCH --vanilla ", scriptName, sep=""))
+                        grid.callback()
+                        #delete remote files
+                        if(!.grid$debug)
+                                system(paste("rm ",.grid$uniqueName,"*",sep=""),intern=TRUE)
+                }
+                else {
+                        grid.lock(grid.input.Parameters.y)
+                        #start remote script
+                        #system(paste(.grid$remoteRPath," CMD BATCH --vanilla ", scriptName,"\"", sep=""))#, intern=TRUE)
+                        system(paste(.grid$remoteRPath," CMD BATCH --vanilla ", scriptName, sep=""))#, intern=TRUE)
+                        grid.waitSshResultFile(yName, paste(scriptName, "out", sep=""))
+                        system(paste(R.home(component="bin"), "/R CMD BATCH --vanilla --slave ",paste(.grid$uniqueName, "-waitForReturn.R",sep=""), " &", sep=""))
+                }
+        }
+}
+
+
+
 ########################################### Condor.ssh #############################################
 else if(.grid$service=="condor.ssh" && is.null(batch) && !.grid$schedulerMode)
 {
