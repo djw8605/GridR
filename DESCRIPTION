@@ -8,4 +8,4 @@ Maintainer: Dennis Wegener <dennis.wegener@iais.fraunhofer.de>
 Description: GridR is an R-Package that can be used to submit R functions for execution on remote computers, clusters or grids. In addition, users are provided with an interface to share variables and functions with other users.
 License: GPL-2
 Depends: codetools
-Packaged: Fri Jan 30 13:50:59 2009; root
+Packaged: Mon Jun 24 13:50:59 2013; root
