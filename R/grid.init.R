@@ -43,8 +43,8 @@
 		return(FALSE)
 	}
 	
-	env=loadNamespace("GridR")
-	unlockBinding(".grid", env)
+	e=loadNamespace("GridR")
+	unlockBinding(".grid", e)
 	
 	if(debug)
 		.grid$debug=TRUE
@@ -480,6 +480,6 @@ if(.grid$schedulerMode){
 	}
   }
 	#end schedulerMode
-assign(".grid",.grid, env)
+assign(".grid",.grid, envir = e)
 }
 
