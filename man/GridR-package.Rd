@@ -68,5 +68,6 @@ library("GridR")
 grid.init(service="local",debug=FALSE, localTmpDir="GridRTmp/")
 #initializes gridR
 grid.apply("x",a, 3, wait=TRUE)
-#applies function `a` with parameter 3 and writes the result to variable x. until the function is executed, x has a lock.
+# applies function `a` with parameter 3 and writes the result to variable x 
+# until the function is executed, x has a lock.
 }

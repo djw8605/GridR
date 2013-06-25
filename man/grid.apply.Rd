@@ -5,7 +5,8 @@
   grid.apply submits a function to another Host or Cluster, to execute it there.
 }
 \usage{
-grid.apply(grid.input.Parameters.y=NULL,grid.input.Parameters.f=NULL,... ,wait=FALSE ,varlist=c(),plots=FALSE, run=1, check=TRUE, batch=NULL, javaSsh=FALSE)
+grid.apply(grid.input.Parameters.y=NULL,grid.input.Parameters.f=NULL,... ,
+   wait=FALSE ,varlist=c(),plots=FALSE, run=1, check=TRUE, batch=NULL, javaSsh=FALSE)
 }
 \arguments{
   \item{grid.input.Parameters.y}{The variable in " " where to write the output if the job is finished }
@@ -41,7 +42,8 @@ library("GridR")
 a<-function(s, p, q){return(s+p+q)}
 grid.init(service="local", localTmpDir="GridRTmp/")
 grid.apply("y",a, c(0,1,2),1, c(100,200,300), wait=TRUE, check=FALSE, batch=c(1,3))
-#Here all combinations of (0,1,2), 1 and (100,200,300) are executed as parameters of function a. A List with all combinations is returned.
+#Here all combinations of (0,1,2), 1 and (100,200,300) are executed as parameters of function a
+# A List with all combinations is returned.
 y
 
 }

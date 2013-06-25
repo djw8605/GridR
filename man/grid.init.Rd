@@ -6,7 +6,9 @@
 If you use a config file, it is not necessary to add one of the parameters explained below.
 }
 \usage{
-grid.init(confFile=NULL, localTmpDir=NULL, verbose=TRUE, sshRemoteIp=NULL, sshUsername=NULL, sshRemoteDir=NULL, myProxyHost=NULL, myProxyUsername=NULL, credentialName=NULL, myProxyPwd=NULL, myProxyPort=NULL, service=NULL, sshKey=NULL, debug=FALSE, sharedDir=NULL, remoteRPath=NULL, schedulerIp=NULL, schedulerPort=NULL)
+grid.init(confFile=NULL, localTmpDir=NULL, verbose=TRUE, sshRemoteIp=NULL, sshUsername=NULL, sshRemoteDir=NULL, 
+   myProxyHost=NULL, myProxyUsername=NULL, credentialName=NULL, myProxyPwd=NULL, myProxyPort=NULL, service=NULL, 
+   sshKey=NULL, debug=FALSE, sharedDir=NULL, remoteRPath=NULL, schedulerIp=NULL, schedulerPort=NULL)
 }
 \arguments{
 \item{confFile}{Path to the config file}
@@ -129,9 +131,12 @@ library("GridR")
 grid.init(service="local", localTmpDir="GridRTmp/")
 #initializes gridR with the parameters entered in the config file
 grid.apply("x",a, 3, wait=TRUE)
-#applies function `a` with parameter 3 and writes the result to variable x. until the function is executed, x has a lock.
+#applies function `a` with parameter 3 and writes the result to variable x
+# until the function is executed, x has a lock.
 x
-grid.apply("y", sum,1:5, wait=TRUE, check=FALSE) # if internal functions are used, its important to set check=FALSE, otherwise the codetools package returns an error
+grid.apply("y", sum,1:5, wait=TRUE, check=FALSE) # if internal functions are used, its 
+                                                 # important to set check=FALSE, otherwise 
+                                                 # the codetools package returns an error
 y
 }
 \keyword{methods }
