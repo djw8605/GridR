@@ -6,10 +6,11 @@
 If you use a config file, it is not necessary to add one of the parameters explained below.
 }
 \usage{
-grid.init(confFile=NULL, localTmpDir=NULL, verbose=TRUE, sshRemoteIp=NULL, sshUsername=NULL,
-   sshRemoteDir=NULL,    myProxyHost=NULL, myProxyUsername=NULL, credentialName=NULL, 
-   myProxyPwd=NULL, myProxyPort=NULL, service=NULL, sshKey=NULL, debug=FALSE, 
-   sharedDir=NULL, remoteRPath=NULL, schedulerIp=NULL, schedulerPort=NULL)
+grid.init(confFile=NULL, localTmpDir=NULL, verbose=TRUE, sshRemoteIp=NULL, 
+   sshUsername=NULL, sshRemoteDir=NULL, myProxyHost=NULL, myProxyUsername=NULL, 
+   credentialName=NULL, myProxyPwd=NULL, myProxyPort=NULL, service=NULL, 
+   sshKey=NULL, debug=FALSE, sharedDir=NULL, remoteRPath=NULL, schedulerIp=NULL, 
+   schedulerPort=NULL)
 }
 \arguments{
 \item{confFile}{Path to the config file}
