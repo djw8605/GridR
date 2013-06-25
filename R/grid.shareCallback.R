@@ -43,6 +43,6 @@ function(...){
 
 	}
 	
-	assign(".grid",.grid, env=loadNamespace("GridR"))
+	assign(".grid",.grid, envir=loadNamespace("GridR"))
 	return(TRUE)
 }
