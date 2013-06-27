@@ -179,7 +179,10 @@ def runR(r_dir):
     # Run R
     r_binary = os.path.join(r_dir, "bin", "R")
     # Set the environment up correctly
-    os.environ["PATH"] = os.path.join(r_dir, "bin") + ":" + os.environ["PATH"]
+    if "PATH" in os.environ:
+        os.environ["PATH"] = os.path.join(r_dir, "bin") + ":" + os.environ["PATH"]
+    else:
+        os.environ["PATH"] = os.path.join(r_dir, "bin") + ":/bin:/usr/bin"
     
     # Call R, with stdout and stderr going to our stdout/stderr
     return subprocess.call(r_binary + " " + " ".join(sys.argv[1:]), shell=True)
