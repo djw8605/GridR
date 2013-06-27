@@ -16,7 +16,7 @@ All needed functions and variables that are necessary to execute that function w
 \tabular{ll}{
 Package: \tab GridR\cr
 Type: \tab Package\cr
-Version: \tab 0.9.4\cr
+Version: \tab 0.9.5\cr
 Date: \tab 2013-06-24\cr
 License: \tab GPL-2\cr
 }
