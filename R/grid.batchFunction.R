@@ -52,16 +52,25 @@ function(grid.input.Parameters, fName, yName, varlist, scriptName, remScriptName
 		}
 		else{
 			#make condorscript
-			condorScript=paste("Executable     = ",remoteRPath,"
-							Universe       = vanilla
+#			condorScript=paste("Executable     = ",remoteRPath,"
+#							Universe       = vanilla
+#							should_transfer_files = YES
+#							when_to_transfer_output = ON_EXIT
+#							arguments      = \"CMD BATCH --vanilla --slave ",remScriptName, "-",count,"\"
+#							Error          = ",errName,"-",count,"
+#							transfer_input_files =",remScriptName,"-",count,",",fName,"
+#							Queue", sep="")
+			condorScript=paste("Executable     = ",system.file(package="GridR", "GridR", "R-bootstrap.py"),"
+							Universe       = grid
 							should_transfer_files = YES
 							when_to_transfer_output = ON_EXIT
-							arguments      = \"CMD BATCH --vanilla --slave ",remScriptName, "-",count,"\"
+							arguments      = CMD BATCH --vanilla --slave ",remScriptName, "-",count,"
 							Error          = ",errName,"-",count,"
 							transfer_input_files =",remScriptName,"-",count,",",fName,"
+                            transfer_output_files =",yName, "-", count, "
 							Queue", sep="")
 			write.table(condorScript,paste(condorName, "-",count,sep=""),quote=FALSE,row.names=FALSE,col.names=FALSE)
-			err=try(system(paste("condor_submit ",condorName, "-",count, sep="")))#,intern=TRUE))
+			err=try(system(paste("source ~/bosco/bosco.sh; condor_submit ",condorName, "-",count, sep="")))#,intern=TRUE))
 		}
 		count=count+1
 	}		
@@ -71,7 +80,7 @@ function(grid.input.Parameters, fName, yName, varlist, scriptName, remScriptName
 	while(count<=length(cmd))
 	{
 		#wait until result of job "count" is ready 
-		while(!file.exists(paste(yName, "-", count, sep=""))){
+		while(!file.exists(paste(yName, "-", count, sep="")) || file.info(paste(yName, "-", count, sep=""))$size==0){
 			#look for condor errors
 			if(file.exists(paste(errName, "-", count,sep="")))
 			{

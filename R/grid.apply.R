@@ -95,7 +95,7 @@ if(is.vector(batch)){
 
   
 	noCondor=FALSE
-	if(.grid$service!="condor.ssh" && .grid$service!="condor.local")
+	if(.grid$service!="condor.ssh" && .grid$service!="condor.local" && .grid$service!="bosco.direct")
 		noCondor=TRUE
 	#if batch mode is used, submit all parameter combinations to condor by inserting a remote function which does the distribution
   if(!is.null(batch)){
