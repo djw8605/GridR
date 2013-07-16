@@ -321,9 +321,9 @@ else if(.grid$service=="bosco.direct")
                         grid.lock(grid.input.Parameters.y)
                         #start remote script
                         #system(paste(.grid$remoteRPath," CMD BATCH --vanilla ", scriptName,"\"", sep=""))#, intern=TRUE)
-                        system(paste(.grid$remoteRPath," CMD BATCH --vanilla ", scriptName, sep=""))#, intern=TRUE)
-                        grid.waitSshResultFile(yName, paste(scriptName, "out", sep=""))
-                        system(paste(R.home(component="bin"), "/R CMD BATCH --vanilla --slave ",paste(.grid$uniqueName, "-waitForReturn.R",sep=""), " &", sep=""))
+                        system(paste(.grid$remoteRPath," CMD BATCH --vanilla ", scriptName, sep=""), wait=FALSE)#, intern=TRUE)
+                        #grid.waitSshResultFile(yName, paste(scriptName, "out", sep=""))
+                        #system(paste(R.home(component="bin"), "/R CMD BATCH --vanilla --slave ",paste(.grid$uniqueName, "-waitForReturn.R",sep=""), " &", sep=""))
                 }
         }
 }
