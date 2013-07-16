@@ -92,18 +92,23 @@ if(is.vector(batch)){
   psName <- paste(.grid$uniqueName,"-plot.ps",sep="")
   errName<- paste(.grid$uniqueName,"-err",sep="")
   condorName<-paste(.grid$uniqueName,"-script.condor",sep="")
+  bosco = FALSE
 
   
 	noCondor=FALSE
 	if(.grid$service!="condor.ssh" && .grid$service!="condor.local" && .grid$service!="bosco.direct")
 		noCondor=TRUE
+    
+    if(.grid$service == "bosco.direct")
+        bosco = TRUE
+    
 	#if batch mode is used, submit all parameter combinations to condor by inserting a remote function which does the distribution
   if(!is.null(batch)){
 	  #(grid.input.Parameters.x, fName, yName, varlist, remScriptName){
 	remoteRPath=.grid$remoteRPath
-	  save(list=c("grid.batchFunction","grid.getBatchCmd", "scriptName", "fName","batch", "noCondor", "check", "yName", "remScriptName", "errName","remoteRPath", "condorName","grid.input.Parameters.x","grid.input.Parameters.f", "varlist",varlist),file=fName)
+	  save(list=c("grid.batchFunction","grid.getBatchCmd", "scriptName", "fName","batch", "noCondor", "check", "yName", "remScriptName", "errName","remoteRPath", "condorName","grid.input.Parameters.x","grid.input.Parameters.f", "varlist", "bosco",varlist),file=fName)
 	  #cmd is the function ( ie. f(grid.input.Parameters.x[[1]])) which should be executed
-	  cmd <- "grid.batchFunction(grid.input.Parameters.x, fName, yName, varlist, scriptName, remScriptName, errName, condorName, batch, check, noCondor, remoteRPath)"
+	  cmd <- "grid.batchFunction(grid.input.Parameters.x, fName, yName, varlist, scriptName, remScriptName, errName, condorName, batch, check, noCondor, remoteRPath, bosco)"
   }
   else {
 	  save(list=c("grid.input.Parameters.x","grid.input.Parameters.f",varlist),file=fName)
@@ -126,7 +131,7 @@ if(check){
 	  if(length(varlist)!=length(tmp)){
 	  	#resave params because varlist has changed
 	  	if(!is.null(batch))
-			  save(list=c("grid.batchFunction","grid.getBatchCmd","fName","batch","noCondor", "check", "yName", "remScriptName", "scriptName", "errName","remoteRPath", "condorName","grid.input.Parameters.x","grid.input.Parameters.f", "varlist",varlist),file=fName)
+			  save(list=c("grid.batchFunction","grid.getBatchCmd","fName","batch","noCondor", "check", "yName", "remScriptName", "scriptName", "errName","remoteRPath", "condorName","grid.input.Parameters.x","grid.input.Parameters.f", "varlist", "bosco",varlist),file=fName)
 	  	else
 			  save(list=c("grid.input.Parameters.x","grid.input.Parameters.f",varlist),file=fName)
 	  }

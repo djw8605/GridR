@@ -15,7 +15,7 @@
 #	Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 `grid.batchFunction` <-
-function(grid.input.Parameters, fName, yName, varlist, scriptName, remScriptName, errName, condorName, batch, check, noCondor, remoteRPath){
+function(grid.input.Parameters, fName, yName, varlist, scriptName, remScriptName, errName, condorName, batch, check, noCondor, remoteRPath, bosco){
 	cmd=grid.getBatchCmd(grid.input.Parameters, batch)
 	count=1
 	while(count<=length(cmd))
@@ -51,26 +51,33 @@ function(grid.input.Parameters, fName, yName, varlist, scriptName, remScriptName
 			system(paste(R.home(component="bin"),"/R CMD BATCH --vanilla ", remScriptName, "-",count, sep=""))
 		}
 		else{
+            if (bosco) {
+    			condorScript=paste("Executable     = ",system.file(package="GridR", "GridR", "R-bootstrap.py"),"
+    							Universe       = grid
+    							should_transfer_files = YES
+    							when_to_transfer_output = ON_EXIT
+    							arguments      = CMD BATCH --vanilla --slave ",remScriptName, "-",count,"
+    							Error          = ",errName,"-",count,"
+    							transfer_input_files =",remScriptName,"-",count,",",fName,"
+                                transfer_output_files =",yName, "-", count, "
+    							Queue", sep="")
+    			write.table(condorScript,paste(condorName, "-",count,sep=""),quote=FALSE,row.names=FALSE,col.names=FALSE)
+    			err=try(system(paste("source ~/bosco/bosco.sh; condor_submit ",condorName, "-",count, sep="")))#,intern=TRUE))
+            } else {
+                condorScript=paste("Executable     = ",remoteRPath,"
+                				Universe       = vanilla
+                				should_transfer_files = YES
+                				when_to_transfer_output = ON_EXIT
+                				arguments      = \"CMD BATCH --vanilla --slave ",remScriptName, "-",count,"\"
+                				Error          = ",errName,"-",count,"
+                				transfer_input_files =",remScriptName,"-",count,",",fName,"
+                				Queue", sep="") 
+                write.table(condorScript,paste(condorName, "-",count,sep=""),quote=FALSE,row.names=FALSE,col.names=FALSE)
+                err=try(system(paste("source ~/bosco/bosco.sh; condor_submit ",condorName, "-",count, sep="")))#,intern=TRUE))
+            }
 			#make condorscript
-#			condorScript=paste("Executable     = ",remoteRPath,"
-#							Universe       = vanilla
-#							should_transfer_files = YES
-#							when_to_transfer_output = ON_EXIT
-#							arguments      = \"CMD BATCH --vanilla --slave ",remScriptName, "-",count,"\"
-#							Error          = ",errName,"-",count,"
-#							transfer_input_files =",remScriptName,"-",count,",",fName,"
-#							Queue", sep="")
-			condorScript=paste("Executable     = ",system.file(package="GridR", "GridR", "R-bootstrap.py"),"
-							Universe       = grid
-							should_transfer_files = YES
-							when_to_transfer_output = ON_EXIT
-							arguments      = CMD BATCH --vanilla --slave ",remScriptName, "-",count,"
-							Error          = ",errName,"-",count,"
-							transfer_input_files =",remScriptName,"-",count,",",fName,"
-                            transfer_output_files =",yName, "-", count, "
-							Queue", sep="")
-			write.table(condorScript,paste(condorName, "-",count,sep=""),quote=FALSE,row.names=FALSE,col.names=FALSE)
-			err=try(system(paste("source ~/bosco/bosco.sh; condor_submit ",condorName, "-",count, sep="")))#,intern=TRUE))
+
+
 		}
 		count=count+1
 	}		
