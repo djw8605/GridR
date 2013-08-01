@@ -100,9 +100,11 @@ You must enter at least the following lines to the config file or command line:\
 </GRIDR>								\# end tag\cr
 
 
-\code{bosco.local}
+\code{bosco.direct}
 
 the function is submitted locally to the machine running the R instance.  It is customized to use Bosco mechanisms to remotely install R on the remote resources. \cr
+
+Information on Bosco can be found at \url{http://bosco.opensciencegrid.org/}.
 
 \code{scheduler}
 if the variable schedulerIp is set, all jobs are started with the use of a scheduler. 
