@@ -77,7 +77,7 @@ while(!end)
 				if(grepRes<40)# missed is a function
 					grepRes=gregexpr("no visible global function definition for", split[[1]][k])[[1]]+43
 				
-				grepResEnd=gregexpr("\n", split[[1]][k])[[1]]-2
+				grepResEnd=gregexpr("\\(", split[[1]][k])[[1]]-3
 				
 				add=substr(split[[1]][k], grepRes, grepResEnd)
 			#	cat(paste(k,"grep var:",add, "\n"))
