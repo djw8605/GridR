@@ -36,6 +36,24 @@
 <p>GridR and Bosco can expand the realm of possibilities for your R processing.  By moving R processing to remote clusters, your R workflows can run hundreds or thousands of simultaneous calculations, all managed from your laptop.</p>
 
 <h3>
+<a name="quick-example" class="anchor" href="#quick-example"><span class="octicon octicon-link"></span></a>Quick Example</h3>
+
+<p>Using GridR and Bosco, you write the code on your laptop, and let the cluster do the heavy lifting.</p>
+
+<pre><code># Initialize
+library(GridR)
+grid.init(service="bosco.direct", localTmpDir="tmp")
+
+# boring function (replace with real work)
+a &lt;- function(s) { return (2*s) }
+
+# Send the function to the remote cluster, wait for the result
+grid.apply("x", a, c(1:10), batch=c(1))
+</code></pre>
+
+<p>With this code, you wrote the function and the inputs, and sent the function <code>a</code> to the cluster to be executed 10 times.  After the calculations have completed, the output will be stored in the variable <code>x</code>.  It was that easy to submit calculations to a remote cluster!</p>
+
+<h3>
 <a name="quick-install" class="anchor" href="#quick-install"><span class="octicon octicon-link"></span></a>Quick Install</h3>
 
 <p>You can quickly install and try out Bosco + GridR using the <a href="https://twiki.grid.iu.edu/bin/view/CampusGrids/BoscoR">quick install</a>.</p>
@@ -56,6 +74,16 @@
       </footer>
     </div>
     <script src="javascripts/scale.fix.js"></script>
-    
+              <script type="text/javascript">
+            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+            document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+          </script>
+          <script type="text/javascript">
+            try {
+              var pageTracker = _gat._getTracker("UA-43020622-1");
+            pageTracker._trackPageview();
+            } catch(err) {}
+          </script>
+
   </body>
 </html>
