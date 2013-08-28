@@ -15,7 +15,7 @@
 #	Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 `grid.batchFunction` <-
-function(grid.input.Parameters, fName, yName, varlist, scriptName, remScriptName, errName, condorName, batch, check, noCondor, remoteRPath, bosco){
+function(grid.input.Parameters, fName, yName, varlist, scriptName, remScriptName, errName, condorName, batch, check, noCondor, remoteRPath, bosco, Rurl, remotePackages){
 	cmd=grid.getBatchCmd(grid.input.Parameters, batch)
 	count=1
 	while(count<=length(cmd))
@@ -52,13 +52,25 @@ function(grid.input.Parameters, fName, yName, varlist, scriptName, remScriptName
 		}
 		else{
             if (bosco) {
+                arguments <- "" 
+                if ( !is.null(Rurl) ) {
+                    arguments <- paste("--url=", Rurl, sep="")
+                }
+                package_files <- ""
+                if ( !is.null(remotePackages) ) {
+                    package_files <- paste(unlist(remotePackages), collapse=", ")
+                    for (package in remotePackages) {
+                        arguments <- paste(arguments, " --package=", basename(package), sep="")
+                    }
+                }
+                    
     			condorScript=paste("Executable     = ",system.file(package="GridR", "GridR", "R-bootstrap.py"),"
     							Universe       = grid
     							should_transfer_files = YES
     							when_to_transfer_output = ON_EXIT
-    							arguments      = CMD BATCH --vanilla --slave ",remScriptName, "-",count,"
+    							arguments      = ", arguments, " -- CMD BATCH --vanilla --slave ",remScriptName, "-",count,"
     							Error          = ",errName,"-",count,"
-    							transfer_input_files =",remScriptName,"-",count,",",fName,"
+    							transfer_input_files =",remScriptName,"-",count,",",fName,", ", package_files, "
                                 transfer_output_files =",yName, "-", count, "
     							Queue", sep="")
     			write.table(condorScript,paste(condorName, "-",count,sep=""),quote=FALSE,row.names=FALSE,col.names=FALSE)
