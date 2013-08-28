@@ -15,7 +15,7 @@
 #	Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 `grid.init` <-
-		function(confFile=NULL, localTmpDir=NULL, verbose=TRUE, sshRemoteIp=NULL, sshUsername=NULL, sshRemoteDir=NULL, myProxyHost=NULL, myProxyUsername=NULL, credentialName=NULL, myProxyPwd=NULL, myProxyPort=NULL, service=NULL, sshKey=NULL, debug=FALSE, sharedDir=NULL, remoteRPath=NULL, schedulerIp=NULL, schedulerPort=NULL){
+		function(confFile=NULL, localTmpDir=NULL, verbose=TRUE, sshRemoteIp=NULL, sshUsername=NULL, sshRemoteDir=NULL, myProxyHost=NULL, myProxyUsername=NULL, credentialName=NULL, myProxyPwd=NULL, myProxyPort=NULL, service=NULL, sshKey=NULL, debug=FALSE, sharedDir=NULL, remoteRPath=NULL, schedulerIp=NULL, schedulerPort=NULL, Rurl=NULL){
 	#delete old values
 	.grid$localDir=NULL
 	.grid$ssh$ip=NULL
@@ -36,6 +36,7 @@
 	.grid$nfs$dir=NULL
 	.grid$schedulerIp=NULL
 	.grid$schedulerPort=NULL
+    .grid$Rurl=NULL
 
     #load config file  
 	if(!exists(".grid", inherits=TRUE)){
@@ -60,6 +61,8 @@
 		cat("Error: cannot find the path where GridR is installed, thus all functions which need java code will not work\n")
 	
 	
+    if (!is.null(Rurl))
+        .grid$Rurl = Rurl
 	
 	configPath=""
 	if(!is.null(confFile) && file.access(confFile)==0){	

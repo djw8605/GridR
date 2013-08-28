@@ -126,6 +126,12 @@ function(plots, yName, psName, fName, remScriptName, remMainName,remMainNameOut,
 		remscript <- append(remscript,"dev.off()")
 	remscript <- append(remscript,"\n q(runLast=FALSE)")
 	write.table(remscript,file=paste(remScriptName,sep=""),quote=FALSE,row.names=FALSE,col.names=FALSE)
+    
+    arguments <- "" 
+    if ( !is.null(grid$Rurl) ) {
+        arguments <- paste("--url=", grid$Rurl, sep="")
+    }
+    
 	if(!onlyssh && batch==FALSE) {
 	
 	  # create R script which submits the job to condor and waits until the file yName exists
@@ -133,7 +139,7 @@ function(plots, yName, psName, fName, remScriptName, remMainName,remMainNameOut,
 			Universe       = grid
 			should_transfer_files = YES
 			when_to_transfer_output = ON_EXIT
-			arguments      = CMD BATCH --vanilla --slave ",remScriptName,"
+			arguments      = ", arguments," -- CMD BATCH --vanilla --slave ",remScriptName,"
 			Error          = ",errName,"
             Output         = ",outName,"
 			transfer_input_files =",remScriptName,",",fName, "

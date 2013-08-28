@@ -52,11 +52,15 @@ function(grid.input.Parameters, fName, yName, varlist, scriptName, remScriptName
 		}
 		else{
             if (bosco) {
+                arguments <- "" 
+                if ( !is.null(grid$Rurl) ) {
+                    arguments <- paste("--url=", grid$Rurl, sep="")
+                }
     			condorScript=paste("Executable     = ",system.file(package="GridR", "GridR", "R-bootstrap.py"),"
     							Universe       = grid
     							should_transfer_files = YES
     							when_to_transfer_output = ON_EXIT
-    							arguments      = CMD BATCH --vanilla --slave ",remScriptName, "-",count,"
+    							arguments      = ", arguments, " -- CMD BATCH --vanilla --slave ",remScriptName, "-",count,"
     							Error          = ",errName,"-",count,"
     							transfer_input_files =",remScriptName,"-",count,",",fName,"
                                 transfer_output_files =",yName, "-", count, "

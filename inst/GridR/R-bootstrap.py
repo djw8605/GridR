@@ -13,6 +13,7 @@ import urllib2
 import platform
 import shutil
 import tarfile
+from optparse import OptionParser
 
 UNKNOWN="UNKNOWN"
 UNSUPPORTED="UNSUPPORTED"
@@ -175,7 +176,7 @@ def installR(install_dir):
     
 
 
-def runR(r_dir):
+def runR(r_dir, args):
     # Run R
     r_binary = os.path.join(r_dir, "bin", "R")
     # Set the environment up correctly
@@ -185,10 +186,27 @@ def runR(r_dir):
         os.environ["PATH"] = os.path.join(r_dir, "bin") + ":/bin:/usr/bin"
     
     # Call R, with stdout and stderr going to our stdout/stderr
-    return subprocess.call(r_binary + " " + " ".join(sys.argv[1:]), shell=True)
+    return subprocess.call(r_binary + " " + " ".join(args), shell=True)
+        
+
+
+def parseOptions():
+    parser = OptionParser()
     
+    parser.add_option("-u", "--url", action="store", type="string", dest="url")
+    
+    (options, args) = parser.parse_args()
+    
+    if options.url is not None:
+        for key in URL_DICT.keys():
+            URL_DICT[key] = options.url
+
+    return args
 
 def main():
+    
+    args = parseOptions()
+    
     # Blahp, in it's infinite wisdom, redfines the $HOME directory
     # We have to get the actual $HOME directory
     if os.environ.has_key("HOME"):
@@ -199,7 +217,7 @@ def main():
     
     if os.path.isdir(r_dir):
         if os.path.exists(os.path.join(r_dir, ".completed")):
-            return runR(r_dir)
+            return runR(r_dir, args)
         
         if os.path.exists(os.path.join(r_dir, ".started")):
             # Install has started... somewhere.  
@@ -209,25 +227,25 @@ def main():
                 time.sleep(5)
                 counter -= 5
                 if os.path.exists(os.path.join(r_dir, ".completed")):
-                    return runR(r_dir)     
+                    return runR(r_dir, args)     
                 else:
                     continue
                 
             if counter <= 0:
                 # Timer ran out, Install R myself
                 installR(r_dir)
-                return runR(r_dir)
+                return runR(r_dir, args)
         
         # If the .completed doesn't exist, and .started doesn't exist, but 
         # r_dir does exist, something odd happened, and we need to install and
         # start over
         installR(r_dir)
-        return runR(r_dir)
+        return runR(r_dir, args)
            
         
     else:
         installR(r_dir)
-        return runR(r_dir)
+        return runR(r_dir, args)
 
 
 
