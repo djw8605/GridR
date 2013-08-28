@@ -56,14 +56,20 @@ function(grid.input.Parameters, fName, yName, varlist, scriptName, remScriptName
                 if ( !is.null(grid$Rurl) ) {
                     arguments <- paste("--url=", grid$Rurl, sep="")
                 }
-                
+                package_files <- ""
+                if ( !is.null(.grid$remotePackages) ) {
+                    package_files <- paste(unlist(.grid$remotePackages), collapse=", ")
+                    for (package in .grid$remotePackages) {
+                        arguments <- paste(arguments, " --package=", basename(package), sep="")
+                }
+                    
     			condorScript=paste("Executable     = ",system.file(package="GridR", "GridR", "R-bootstrap.py"),"
     							Universe       = grid
     							should_transfer_files = YES
     							when_to_transfer_output = ON_EXIT
     							arguments      = ", arguments, " -- CMD BATCH --vanilla --slave ",remScriptName, "-",count,"
     							Error          = ",errName,"-",count,"
-    							transfer_input_files =",remScriptName,"-",count,",",fName,"
+    							transfer_input_files =",remScriptName,"-",count,",",fName,", ", package_files, "
                                 transfer_output_files =",yName, "-", count, "
     							Queue", sep="")
     			write.table(condorScript,paste(condorName, "-",count,sep=""),quote=FALSE,row.names=FALSE,col.names=FALSE)
