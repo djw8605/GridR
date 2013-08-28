@@ -15,7 +15,7 @@
 #	Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 `grid.init` <-
-		function(confFile=NULL, localTmpDir=NULL, verbose=TRUE, sshRemoteIp=NULL, sshUsername=NULL, sshRemoteDir=NULL, myProxyHost=NULL, myProxyUsername=NULL, credentialName=NULL, myProxyPwd=NULL, myProxyPort=NULL, service=NULL, sshKey=NULL, debug=FALSE, sharedDir=NULL, remoteRPath=NULL, schedulerIp=NULL, schedulerPort=NULL, Rurl=NULL){
+		function(confFile=NULL, localTmpDir=NULL, verbose=TRUE, sshRemoteIp=NULL, sshUsername=NULL, sshRemoteDir=NULL, myProxyHost=NULL, myProxyUsername=NULL, credentialName=NULL, myProxyPwd=NULL, myProxyPort=NULL, service=NULL, sshKey=NULL, debug=FALSE, sharedDir=NULL, remoteRPath=NULL, schedulerIp=NULL, schedulerPort=NULL, Rurl=NULL, remotePackages=NULL){
 	#delete old values
 	.grid$localDir=NULL
 	.grid$ssh$ip=NULL
@@ -63,6 +63,8 @@
 	
     if (!is.null(Rurl))
         .grid$Rurl = Rurl
+    if (!is.null(remotePackages))
+        .grid$remotePackages = remotePackages
 	
 	configPath=""
 	if(!is.null(confFile) && file.access(confFile)==0){	

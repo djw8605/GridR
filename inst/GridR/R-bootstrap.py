@@ -33,6 +33,8 @@ URL_DICT={
   RH6: "https://www.dropbox.com/s/7qfa9no0ckusuys/el6-R-modified.tar.gz",
 }
 
+additional_packages = []
+
 def findInstallDir(home_dir):
     
     return_dir = home_dir
@@ -175,6 +177,14 @@ def installR(install_dir):
     f.close()
     
 
+def installPackages(packages, r_binary):
+    
+    for package in packages:
+        if not os.path.exists(package):
+            sys.stderr.write("ERROR: Unable to find package: %s" % package)
+            continue
+        subprocess.call("%s CMD INSTALL --build %s" % ( r_binary, package ), shell=True)
+        
 
 def runR(r_dir, args):
     # Run R
@@ -184,6 +194,8 @@ def runR(r_dir, args):
         os.environ["PATH"] = os.path.join(r_dir, "bin") + ":" + os.environ["PATH"]
     else:
         os.environ["PATH"] = os.path.join(r_dir, "bin") + ":/bin:/usr/bin"
+        
+    installPackages(additional_packages, r_binary)
     
     # Call R, with stdout and stderr going to our stdout/stderr
     return subprocess.call(r_binary + " " + " ".join(args), shell=True)
@@ -194,12 +206,15 @@ def parseOptions():
     parser = OptionParser()
     
     parser.add_option("-u", "--url", action="store", type="string", dest="url")
+    parser.add_option("-p", "--package", action="append", type="string", dest="packages")
     
     (options, args) = parser.parse_args()
     
     if options.url is not None:
         for key in URL_DICT.keys():
             URL_DICT[key] = options.url
+
+    additional_packages = options.packages
 
     return args
 

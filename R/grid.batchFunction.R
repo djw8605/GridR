@@ -56,6 +56,7 @@ function(grid.input.Parameters, fName, yName, varlist, scriptName, remScriptName
                 if ( !is.null(grid$Rurl) ) {
                     arguments <- paste("--url=", grid$Rurl, sep="")
                 }
+                
     			condorScript=paste("Executable     = ",system.file(package="GridR", "GridR", "R-bootstrap.py"),"
     							Universe       = grid
     							should_transfer_files = YES
