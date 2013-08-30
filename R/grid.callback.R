@@ -303,17 +303,23 @@ function(...){
     	}
       	assign(jobs[[i]]$var,grid.input.Parameters,.GlobalEnv)
       }
-	  if(!del) 
-		  del=TRUE
-	  else
-		 #delete all files of this job
-			if(!.grid$debug)
-      	 		unlink(paste(.grid$localDir,jobs[[i]]$name,"-*",sep=""))
+      
+      # If the batch jobs are not done, and the above only read in the completed bits
+      if (!exists("grid.batch_done")) {
+    	  if(!del) 
+    		  del=TRUE
+    	  else
+    		 #delete all files of this job
+    			if(!.grid$debug)
+          	 		unlink(paste(.grid$localDir,jobs[[i]]$name,"-*",sep=""))
 			
-      jobs <- jobs[setdiff(1:length(jobs),i)]
+          jobs <- jobs[setdiff(1:length(jobs),i)]
 
-      if(reapply)
-		i=length(jobs)+1
+          if(reapply)
+    		i=length(jobs)+1
+    } else {
+        unlink(filename)
+    }
     }
     else{
    	i <- i+1
