@@ -169,8 +169,12 @@ def installR(install_dir):
     # Ok, now move the R installation into the correct directory
     tmp_r_dir = os.path.join(tmp_dir, 'R')
     for rDir in os.listdir(tmp_r_dir):
-        shutil.rmtree(os.path.join(install_dir, rDir), ignore_errors=True)
-        shutil.move(os.path.join(tmp_r_dir, rDir), os.path.join(install_dir, rDir))
+        try:
+            shutil.rmtree(os.path.join(install_dir, rDir), ignore_errors=True)
+            shutil.move(os.path.join(tmp_r_dir, rDir), os.path.join(install_dir, rDir))
+        except OSError:
+            sys.stderr.write("Unable to move directory: %s, moving on..." % rDir)
+            
     #shutil.move(os.path.join(tmp_dir, 'R'), install_dir)
     shutil.rmtree(tmp_dir)
     
@@ -245,19 +249,20 @@ def main():
             # Initialize to some time way in the past
             completed_date = datetime(1970, 1, 1)
             try:
-                completed_date = datetime.fromtimestamp(os.path.getmtime(os.path.join(r_dir, ".completed")))
+                completed_date = datetime.utcfromtimestamp(os.path.getmtime(os.path.join(r_dir, ".completed")))
 
             except OSError:
                 # If there's an OS error, then that typically means that the .completed file
                 # was removed (race condition).  We can just ignore it.
-                sys.stderr.write("The .completed file was deleted on us")
+                sys.stderr.write("The .completed file was deleted on us\n")
                 pass
             
             if completed_date < server_date:
-                sys.stderr.write("Completed time is before server time")
+                sys.stderr.write("Completed time is before server time\n")
                 sys.stderr.write(str(completed_date))
                 sys.stderr.write(str(server_date))
                 try:
+                    os.remove(os.path.join(r_dir, ".started"))
                     os.remove(os.path.join(r_dir, ".completed"))
                 except OSError:
                     pass

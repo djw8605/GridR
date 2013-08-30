@@ -100,6 +100,7 @@ function(grid.input.Parameters, fName, yName, varlist, scriptName, remScriptName
 	#read outputs
 	while(count_done < length(cmd))
     {
+        count_done_prev = count_done
         count_done = 0
         count=1
      	while(count<=length(cmd))
@@ -126,9 +127,12 @@ function(grid.input.Parameters, fName, yName, varlist, scriptName, remScriptName
             		else
             			ret[[count]]=grid.input.Parameters#c(y, paste("result from parameters:",cmd[count]))
             		count_done = count_done + 1
-                    grid.input.Parameters = ret
-                    unlink(yName)
-                    save(list=c("grid.batch_done", "grid.input.Parameters"), file=yName)
+                    if ( count_done_prev != count_done ) {
+                        # Only update the file if something changed
+                        grid.input.Parameters = ret
+                        unlink(yName)
+                        save(list=c("grid.batch_done", "grid.input.Parameters"), file=yName)
+                    }
                     
     			}
     			if(file.exists(paste(scriptName, "out",sep=""))){
