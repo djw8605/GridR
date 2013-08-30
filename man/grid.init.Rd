@@ -31,6 +31,8 @@ grid.init(confFile=NULL, localTmpDir=NULL, verbose=TRUE, sshRemoteIp=NULL,
   \item{remoteRPath}{Path to R, if needed}
   \item{schedulerIp}{If a scheduler should be used, add his IP here}
   \item{schedulerPort}{Port of the scheduler, if used}
+  \item{remotePackages}{For \code{bosco.direct} service, a list of source packages to be installed on the remote R instance before executing the user function.  This should be the full path to the source packages.}
+  \item{Rurl}{For \code{bosco.direct} service, a string URL from which to download the R binaries from.}
 }
 \details{The easiest way to use GridR is to use a config file.\cr
 The name of the config file is "gridr.conf" and it should be placed inside the user home directory or the directory from where R is executed. if another path is used, please specify it with the value \"configFile\"\cr
