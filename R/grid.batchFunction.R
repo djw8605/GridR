@@ -95,43 +95,58 @@ function(grid.input.Parameters, fName, yName, varlist, scriptName, remScriptName
 	}		
 	count=1
 	ret=list()
+    count_done=0
+    grid.batch_done=FALSE
 	#read outputs
-	while(count<=length(cmd))
-	{
-		#wait until result of job "count" is ready 
-		while(!file.exists(paste(yName, "-", count, sep="")) || file.info(paste(yName, "-", count, sep=""))$size==0){
-			#look for condor errors
-			if(file.exists(paste(errName, "-", count,sep="")))
-			{
-				err=scan(file=paste(errName, "-", count,sep=""), what=character(0), quiet=TRUE )
-				if(length(err)>0) 
-					return(paste("Condor error: ",err, sep=""))
-			}
-			if(file.exists(paste(scriptName, "out",sep=""))){
-				out=scan(file=paste(scriptName, "out",sep=""), what=character(0), sep="\n")
-				if(any(grep("^ERROR:", out))) 
-					return(paste("RemoteError:", grep("^ERROR:", out, value=TRUE)))
-				if(any(grep("^WARNING:", out)))
-					return(paste("RemoteError:", grep("^WARNING:", out, value=TRUE)))
-			}
-			#if no error, wait until result file exists				
-			Sys.sleep(5)
-		}
-		#if result file exists:
-		op=options()
-		options(show.error.messages=FALSE)
-		options(warn=-1)
-		err=try(load(paste(yName, "-", count, sep="")))
-		options(show.error.messages=TRUE)
-		options(op)
-		if(inherits(err, "try-error")){
-			err2=scan(file=paste(yName, "-", count, sep=""), what=character(0), sep="\n", quiet=TRUE )
-			ret[[count]]=c(paste("Remote Error:",err2), paste("result from parameters:",cmd[count]))
-		}
-		else
-			ret[[count]]=grid.input.Parameters#c(y, paste("result from parameters:",cmd[count]))
-		count=count+1
-	}
+	while(count_done < length(cmd))
+    {
+        count_done = 0
+        count=1
+     	while(count<=length(cmd))
+    	{
+    		#wait until result of job "count" is ready 
+    		if(file.exists(paste(yName, "-", count, sep="")) && file.info(paste(yName, "-", count, sep=""))$size!=0){
+    			#look for condor errors
+    			if(file.exists(paste(errName, "-", count,sep="")))
+    			{
+    				err=scan(file=paste(errName, "-", count,sep=""), what=character(0), quiet=TRUE )
+    				if(length(err)>0) 
+    					return(paste("Condor error: ",err, sep=""))
+            		#if result file exists:
+            		op=options()
+            		options(show.error.messages=FALSE)
+            		options(warn=-1)
+            		err=try(load(paste(yName, "-", count, sep="")))
+            		options(show.error.messages=TRUE)
+            		options(op)
+            		if(inherits(err, "try-error")){
+            			err2=scan(file=paste(yName, "-", count, sep=""), what=character(0), sep="\n", quiet=TRUE )
+            			ret[[count]]=c(paste("Remote Error:",err2), paste("result from parameters:",cmd[count]))
+            		}
+            		else
+            			ret[[count]]=grid.input.Parameters#c(y, paste("result from parameters:",cmd[count]))
+            		count_done = count_done + 1
+                    grid.input.Parameters = ret
+                    unlink(yName)
+                    save(list=c("grid.batch_done", "grid.input.Parameters"), file=yName)
+                    
+    			}
+    			if(file.exists(paste(scriptName, "out",sep=""))){
+    				out=scan(file=paste(scriptName, "out",sep=""), what=character(0), sep="\n")
+    				if(any(grep("^ERROR:", out))) 
+    					return(paste("RemoteError:", grep("^ERROR:", out, value=TRUE)))
+    				if(any(grep("^WARNING:", out)))
+    					return(paste("RemoteError:", grep("^WARNING:", out, value=TRUE)))
+    			}
+ 
+    		}
+    		
+    		count=count+1
+    	}
+		#if no error, wait until result file exists				
+		Sys.sleep(5)
+    }
+    unlink(yName)
 	return(ret)
 }
 
