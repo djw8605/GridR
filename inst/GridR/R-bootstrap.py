@@ -14,6 +14,7 @@ import platform
 import shutil
 import tarfile
 from optparse import OptionParser
+from datetime import datetime
 
 UNKNOWN="UNKNOWN"
 UNSUPPORTED="UNSUPPORTED"
@@ -168,6 +169,7 @@ def installR(install_dir):
     # Ok, now move the R installation into the correct directory
     tmp_r_dir = os.path.join(tmp_dir, 'R')
     for rDir in os.listdir(tmp_r_dir):
+        shutil.rmtree(os.path.join(install_dir, rDir), ignore_errors=True)
         shutil.move(os.path.join(tmp_r_dir, rDir), os.path.join(install_dir, rDir))
     #shutil.move(os.path.join(tmp_dir, 'R'), install_dir)
     shutil.rmtree(tmp_dir)
@@ -232,7 +234,39 @@ def main():
     
     if os.path.isdir(r_dir):
         if os.path.exists(os.path.join(r_dir, ".completed")):
-            return runR(r_dir, args)
+            
+            # Check if the R binaries are out of date  
+            version = findversion()
+            request = urllib2.Request(URL_DICT[version], None, {"User-Agent": "curl/7.29.0"})
+            response = urllib2.urlopen(request)
+            headers = response.info()
+            server_date = datetime.strptime(headers.get("Last-Modified"), "%a, %d %b %Y %H:%M:%S %Z")
+            
+            # Initialize to some time way in the past
+            completed_date = datetime(1970, 1, 1)
+            try:
+                completed_date = datetime.fromtimestamp(os.path.getmtime(os.path.join(r_dir, ".completed")))
+
+            except OSError:
+                # If there's an OS error, then that typically means that the .completed file
+                # was removed (race condition).  We can just ignore it.
+                sys.stderr.write("The .completed file was deleted on us")
+                pass
+            
+            if completed_date < server_date:
+                sys.stderr.write("Completed time is before server time")
+                sys.stderr.write(str(completed_date))
+                sys.stderr.write(str(server_date))
+                try:
+                    os.remove(os.path.join(r_dir, ".completed"))
+                except OSError:
+                    pass
+            else:            
+                return runR(r_dir, args)
+                    
+
+            
+
         
         if os.path.exists(os.path.join(r_dir, ".started")):
             # Install has started... somewhere.  
