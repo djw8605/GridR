@@ -126,6 +126,21 @@ function(plots, yName, psName, fName, remScriptName, remMainName,remMainNameOut,
 		remscript <- append(remscript,"dev.off()")
 	remscript <- append(remscript,"\n q(runLast=FALSE)")
 	write.table(remscript,file=paste(remScriptName,sep=""),quote=FALSE,row.names=FALSE,col.names=FALSE)
+    
+    arguments <- "" 
+    if ( !is.null(.grid$Rurl) ) {
+        arguments <- paste(" --url=", .grid$Rurl, sep="")
+    }
+    package_files <- ""
+    if ( !is.null(.grid$remotePackages) ) {
+        package_files <- paste(unlist(.grid$remotePackages), collapse=", ")
+        for (package in .grid$remotePackages) {
+            arguments <- paste(arguments, " --package=", basename(package), sep="")
+        }
+        
+        
+    }
+    
 	if(!onlyssh && batch==FALSE) {
 	
 	  # create R script which submits the job to condor and waits until the file yName exists
@@ -133,10 +148,10 @@ function(plots, yName, psName, fName, remScriptName, remMainName,remMainNameOut,
 			Universe       = grid
 			should_transfer_files = YES
 			when_to_transfer_output = ON_EXIT
-			arguments      = CMD BATCH --vanilla --slave ",remScriptName,"
+			arguments      = ", arguments," -- CMD BATCH --vanilla --slave ",remScriptName,"
 			Error          = ",errName,"
             Output         = ",outName,"
-			transfer_input_files =",remScriptName,",",fName, "
+			transfer_input_files =",remScriptName,",",fName, ", ", package_files, "
             transfer_output_files =",yName, 
             #environment = \\\"PATH=$PATH:~/bosco/R/bin R_ROOT_DIR=~/bosco/R RHOME=${R_ROOT_DIR} \\\" ",
 			#"\ntransfer_files = ALWAYS",
