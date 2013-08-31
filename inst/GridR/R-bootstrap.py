@@ -244,7 +244,7 @@ def main():
             request = urllib2.Request(URL_DICT[version], None, {"User-Agent": "curl/7.29.0"})
             response = urllib2.urlopen(request)
             headers = response.info()
-            server_date = datetime.strptime(headers.get("Last-Modified"), "%a, %d %b %Y %H:%M:%S %Z")
+            server_date = datetime.fromtimestamp(time.mktime(time.strptime(headers.get("Last-Modified"), "%a, %d %b %Y %H:%M:%S %Z")))
             
             # Initialize to some time way in the past
             completed_date = datetime(1970, 1, 1)
@@ -254,13 +254,9 @@ def main():
             except OSError:
                 # If there's an OS error, then that typically means that the .completed file
                 # was removed (race condition).  We can just ignore it.
-                sys.stderr.write("The .completed file was deleted on us\n")
                 pass
             
             if completed_date < server_date:
-                sys.stderr.write("Completed time is before server time\n")
-                sys.stderr.write(str(completed_date))
-                sys.stderr.write(str(server_date))
                 try:
                     os.remove(os.path.join(r_dir, ".started"))
                     os.remove(os.path.join(r_dir, ".completed"))
