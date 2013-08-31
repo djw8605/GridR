@@ -254,13 +254,13 @@ def main():
             except OSError:
                 # If there's an OS error, then that typically means that the .completed file
                 # was removed (race condition).  We can just ignore it.
-                sys.stderr.write("The .completed file was deleted on us\n")
+                #sys.stderr.write("The .completed file was deleted on us\n")
                 pass
             
             if completed_date < server_date:
-                sys.stderr.write("Completed time is before server time\n")
-                sys.stderr.write(str(completed_date))
-                sys.stderr.write(str(server_date))
+                #sys.stderr.write("Completed time is before server time\n")
+                #sys.stderr.write(str(completed_date))
+                #sys.stderr.write(str(server_date))
                 try:
                     os.remove(os.path.join(r_dir, ".started"))
                     os.remove(os.path.join(r_dir, ".completed"))
