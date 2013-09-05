@@ -108,7 +108,7 @@ The function is submitted locally to the machine running the R instance.  GridR 
 
 \code{Rurl} specifies the URL for which to download the portable R binaries to use for remote exeuction.  This can be useful if you require specific version of R or if you wish to install all packages into a R distributable without using \code{remotePackages}.  These can be built by slightly modifying the \code{R} scripts  in the compiled R directory \code{bin/R} and \code{lib64/R/bin/R} to remove hard coded paths.  The R binaries directory must be compressed in \code{tar.gz} format.  The binaries may be hosted anywhere, but the supported protocols for download are HTTP, HTTPS, and FTP.
 
-\code{remotePackages} lists the packages that should be installed on the remote execution host before starting the submitted function.  This can be useful when a function requires packages not part of the standard R distrubtion.
+\code{remotePackages} lists the packages that should be installed on the remote execution host before starting the submitted function.  This can be useful when a function requires packages not part of the standard R distrubtion.  The packages in the list should be the full path to the source packages.
 
 
 \code{scheduler}
