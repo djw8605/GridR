@@ -104,9 +104,12 @@ You must enter at least the following lines to the config file or command line:\
 
 \code{bosco.direct}
 
-the function is submitted locally to the machine running the R instance.  It is customized to use Bosco mechanisms to remotely install R on the remote resources. \cr
+The function is submitted locally to the machine running the R instance.  GridR is customized to use Bosco mechanisms to remotely install R on the remote resources.  Information on Bosco can be found at \url{http://bosco.opensciencegrid.org/}.
 
-Information on Bosco can be found at \url{http://bosco.opensciencegrid.org/}.
+\code{Rurl} specifies the URL for which to download the portable R binaries to use for remote exeuction.  This can be useful if you require specific version of R or if you wish to install all packages into a R distributable without using \code{remotePackages}.  These can be built by slightly modifying the \code{R} scripts  in the compiled R directory \code{bin/R} and \code{lib64/R/bin/R} to remove hard coded paths.  The R binaries directory must be compressed in \code{tar.gz} format.  The binaries may be hosted anywhere, but the supported protocols for download are HTTP, HTTPS, and FTP.
+
+\code{remotePackages} lists the packages that should be installed on the remote execution host before starting the submitted function.  This can be useful when a function requires packages not part of the standard R distrubtion.
+
 
 \code{scheduler}
 if the variable schedulerIp is set, all jobs are started with the use of a scheduler. 
@@ -144,5 +147,15 @@ grid.apply("y", sum,1:5, wait=TRUE, check=FALSE) # if internal functions are use
                                                  # important to set check=FALSE, otherwise 
                                                  # the codetools package returns an error
 y
+
+\donttest{
+# For the bosco.direct service, adding the remotePackages
+grid.init(service="bosco.direct", localTmpDir="GridRTmp/", remotePackages=c("GridR_0.9.8.tar.gz"))
+# Again, apply the function
+grid.apply("x", a, 10, wait=TRUE)
+x
+   
+}
+
 }
 \keyword{methods }
