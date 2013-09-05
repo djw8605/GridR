@@ -51,9 +51,9 @@ If condor modes are used, a link to R must be added to /usr/bin/ or add a line t
 <REMOTERPATH>/path/to/R</REMOTERPATH>\cr
 If the condor batch modes are used, the package GridR must be installed on each Cluster-Host.
 
-Availible Modes:
+Available Modes:
 
-\code{variableSharing}
+\subsection{variableSharing}{
 
 only variable and function sharing is initialized.\cr
 You must enter at least the following lines to the config file or command line:\cr
@@ -62,8 +62,9 @@ You must enter at least the following lines to the config file or command line:\
 <SHAREDDIR>/home/user/mlohmeyer/share</SHAREDDIR> 	\#local dir where to put tmp files\cr
 <SERVICE>variableSharing</SERVICE>					\#which default service to use by default	\cr
 </GRIDR> 											\# end tag\cr
+}
 
-\code{local}
+\subsection{local}{
 
 the function is executed locally.\cr
 You must enter at least the following lines to the config file or command line:\cr
@@ -72,8 +73,9 @@ You must enter at least the following lines to the config file or command line:\
 <LOCALTMPDIR>/home/user</LOCALTMPDIR>   \#local dir where to put tmp files\cr
 <SERVICE>local</SERVICE>				\#which default service to use by default	\cr
 </GRIDR> 								\# end tag\cr
+}
 
-\code{remote.ssh}
+\subsection{remote.ssh}{
 
 the function is copied with ssh to a single computer and is executed there directly in R.\cr
 You must enter at least the following lines to the config file or command line:\cr
@@ -86,8 +88,9 @@ You must enter at least the following lines to the config file or command line:\
 <SERVICE>remote.ssh</SERVICE>			\#which default service to use by default	\cr
 <SSHKEY>/home/user/.ssh/id\_rsa</SSHKEY>	\#on windows systems or with javaSsh=TRUE you have to specify the path to your public RSA key\cr
 </GRIDR> 								\# end tag\cr
+}
 
-\code{condor.ssh}
+\subsection{condor.ssh}{
 
 the function is copied with ssh to a computer which is connected to a condor pool and where submission of jobs is possible.\cr
 You must enter at least the following lines to the config file or command line:\cr
@@ -100,18 +103,18 @@ You must enter at least the following lines to the config file or command line:\
 <SSHKEY>/home/user/.ssh/id\_rsa</SSHKEY>	\#on windows systems or with javaSsh=TRUE you have to specify the path to your public RSA key \cr
 <REMOTERPATH>pathToRemoteR</REMOTERPATH>\# if R is not linked to /usr/bin/R on serverside, please add this Tag here
 </GRIDR>								\# end tag\cr
+}
 
-
-\code{bosco.direct}
+\subsection{bosco.direct}{
 
 The function is submitted locally to the machine running the R instance.  GridR is customized to use Bosco mechanisms to remotely install R on the remote resources.  Information on Bosco can be found at \url{http://bosco.opensciencegrid.org/}.
 
 \code{Rurl} specifies the URL for which to download the portable R binaries to use for remote exeuction.  This can be useful if you require specific version of R or if you wish to install all packages into a R distributable without using \code{remotePackages}.  These can be built by slightly modifying the \code{R} scripts  in the compiled R directory \code{bin/R} and \code{lib64/R/bin/R} to remove hard coded paths.  The R binaries directory must be compressed in \code{tar.gz} format.  The binaries may be hosted anywhere, but the supported protocols for download are HTTP, HTTPS, and FTP.
 
 \code{remotePackages} lists the packages that should be installed on the remote execution host before starting the submitted function.  This can be useful when a function requires packages not part of the standard R distrubtion.  The packages in the list should be the full path to the source packages.
+}
 
-
-\code{scheduler}
+\subsection{scheduler}{
 if the variable schedulerIp is set, all jobs are started with the use of a scheduler. 
 At grid.init() it is checked if there are jobs which are started earlier from another R Session. 
 If so they are imported to your active R Session.
@@ -122,9 +125,10 @@ Download trilead-ssh2-build212.jar or similar at \url{http://www.trilead.com/Dow
 and save it to the lib Directory.
 Now you can start the scheduler with ./start.sh <port>.
 The scheduler can be restarted with \code{\link{grid.restartScheduler}} and stopped with \code{\link{grid.stopScheduler}}.
-In scheduler Mode, all submitted jobs can be stopped by \code{\link{grid.stopJob}} or restarted by \code{\link{grid.restartJob}}   
+In scheduler Mode, all submitted jobs can be stopped by \code{\link{grid.stopJob}} or restarted by \code{\link{grid.restartJob}}  
+} 
 }
-\author{ Malte Lohmeyer }
+\author{ Malte Lohmeyer, Derek Weitzel }
 
 \seealso{ 
 \code{\link{grid.apply}} 
