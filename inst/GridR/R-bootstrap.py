@@ -29,9 +29,10 @@ SUPPORTED_PLATFORMS = [ RH5, RH6, DEB6 ]
 
 # download URLs for the different platforms
 URL_DICT={
-  DEB6: "To be determined",
+  DEB6: "http://osg-xsede.grid.iu.edu/software/boscor/deb6-modified.tar.gz",
   RH5: "http://osg-xsede.grid.iu.edu/software/boscor/el5-R-modified.tar.gz",
   RH6: "http://osg-xsede.grid.iu.edu/software/boscor/el6-R-modified.tar.gz",
+  UNKNOWN: "UNKNOWN Platform"
 }
 
 additional_packages = []
