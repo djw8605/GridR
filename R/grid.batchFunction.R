@@ -113,28 +113,28 @@ function(grid.input.Parameters, fName, yName, varlist, scriptName, remScriptName
     				err=scan(file=paste(errName, "-", count,sep=""), what=character(0), quiet=TRUE )
     				if(length(err)>0) 
     					return(paste("Condor error: ",err, sep=""))
-            		#if result file exists:
-            		op=options()
-            		options(show.error.messages=FALSE)
-            		options(warn=-1)
-            		err=try(load(paste(yName, "-", count, sep="")))
-            		options(show.error.messages=TRUE)
-            		options(op)
-            		if(inherits(err, "try-error")){
-            			err2=scan(file=paste(yName, "-", count, sep=""), what=character(0), sep="\n", quiet=TRUE )
-            			ret[[count]]=c(paste("Remote Error:",err2), paste("result from parameters:",cmd[count]))
-            		}
-            		else
-            			ret[[count]]=grid.input.Parameters#c(y, paste("result from parameters:",cmd[count]))
-            		count_done = count_done + 1
-                    if ( count_done_prev != count_done ) {
-                        # Only update the file if something changed
-                        grid.input.Parameters = ret
-                        unlink(yName)
-                        save(list=c("grid.batch_done", "grid.input.Parameters"), file=yName)
-                    }
+                }
+            	#if result file exists:
+            	op=options()
+            	options(show.error.messages=FALSE)
+            	options(warn=-1)
+            	err=try(load(paste(yName, "-", count, sep="")))
+            	options(show.error.messages=TRUE)
+            	options(op)
+            	if(inherits(err, "try-error")){
+            		err2=scan(file=paste(yName, "-", count, sep=""), what=character(0), sep="\n", quiet=TRUE )
+            		ret[[count]]=c(paste("Remote Error:",err2), paste("result from parameters:",cmd[count]))
+            	}
+            	else
+            		ret[[count]]=grid.input.Parameters#c(y, paste("result from parameters:",cmd[count]))
+            	count_done = count_done + 1
+                if ( count_done_prev != count_done ) {
+                    # Only update the file if something changed
+                    grid.input.Parameters = ret
+                    unlink(yName)
+                    save(list=c("grid.batch_done", "grid.input.Parameters"), file=yName)
+                }
                     
-    			}
     			if(file.exists(paste(scriptName, "out",sep=""))){
     				out=scan(file=paste(scriptName, "out",sep=""), what=character(0), sep="\n")
     				if(any(grep("^ERROR:", out))) 
