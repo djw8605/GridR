@@ -10,7 +10,7 @@ grid.init(confFile=NULL, localTmpDir=NULL, verbose=TRUE, sshRemoteIp=NULL,
    sshUsername=NULL, sshRemoteDir=NULL, myProxyHost=NULL, myProxyUsername=NULL, 
    credentialName=NULL, myProxyPwd=NULL, myProxyPort=NULL, service=NULL, 
    sshKey=NULL, debug=FALSE, sharedDir=NULL, remoteRPath=NULL, schedulerIp=NULL, 
-   schedulerPort=NULL, Rurl = NULL, remotePackages = NULL)
+   schedulerPort=NULL, Rurl = NULL, remotePackages = NULL, bootstrap=NULL)
 }
 \arguments{
 \item{confFile}{Path to the config file}
@@ -33,6 +33,7 @@ grid.init(confFile=NULL, localTmpDir=NULL, verbose=TRUE, sshRemoteIp=NULL,
   \item{schedulerPort}{Port of the scheduler, if used}
   \item{Rurl}{For \code{bosco.direct} service, a string URL from which to download the R binaries from.}
   \item{remotePackages}{For \code{bosco.direct} service, a list of source packages to be installed on the remote R instance before executing the user function.  This should be the full path to the source packages.}
+  \item{bootstrap}{ For \code{condor.local} service, when \code{TRUE}, will run a boostrap script to install R on the local system and use it to run the user's function.}
 
 }
 \details{The easiest way to use GridR is to use a config file.\cr
@@ -104,6 +105,18 @@ You must enter at least the following lines to the config file or command line:\
 <SSHKEY>/home/user/.ssh/id\_rsa</SSHKEY>	\#on windows systems or with javaSsh=TRUE you have to specify the path to your public RSA key \cr
 <REMOTERPATH>pathToRemoteR</REMOTERPATH>\# if R is not linked to /usr/bin/R on serverside, please add this Tag here
 </GRIDR>								\# end tag\cr
+}
+
+
+\subsection{condor.local}{
+
+The function is to be submitted locallying to the machine running the R instance.  GridR will submit a \code{universe = vanilla} job to the local HTCondor instance.
+
+\code{bootstrap} specifies if the job should use a bootstrap script to install it's own R installation.  If FALSE or undefined, it will use the system's installed R.
+
+\code{Rurl} specifies the URL for which to download the portable R binaries to use for remote exeuction.  This can be useful if you require specific version of R or if you wish to install all packages into a R distributable without using \code{remotePackages}.  These can be built by slightly modifying the \code{R} scripts  in the compiled R directory \code{bin/R} and \code{lib64/R/bin/R} to remove hard coded paths.  The R binaries directory must be compressed in \code{tar.gz} format.  The binaries may be hosted anywhere, but the supported protocols for download are HTTP, HTTPS, and FTP.
+
+\code{remotePackages} lists the packages that should be installed on the remote execution host before starting the submitted function.  This can be useful when a function requires packages not part of the standard R distrubtion.  The packages in the list should be the full path to the source packages.
 }
 
 \subsection{bosco.direct}{

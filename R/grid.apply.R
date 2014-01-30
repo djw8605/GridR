@@ -95,6 +95,7 @@ if(is.vector(batch)){
   bosco = FALSE
   Rurl = .grid$Rurl
   remotePackages = .grid$remotePackages
+  bootstrap = .grid$bootstrap
 
   
 	noCondor=FALSE
@@ -108,9 +109,9 @@ if(is.vector(batch)){
   if(!is.null(batch)){
 	  #(grid.input.Parameters.x, fName, yName, varlist, remScriptName){
 	remoteRPath=.grid$remoteRPath
-	  save(list=c("grid.batchFunction","grid.getBatchCmd", "scriptName", "fName","batch", "noCondor", "check", "yName", "remScriptName", "errName","remoteRPath", "condorName","grid.input.Parameters.x","grid.input.Parameters.f", "varlist", "bosco", "Rurl", "remotePackages", varlist),file=fName)
+	  save(list=c("grid.batchFunction","grid.getBatchCmd", "scriptName", "fName","batch", "noCondor", "check", "yName", "remScriptName", "errName","remoteRPath", "condorName","grid.input.Parameters.x","grid.input.Parameters.f", "varlist", "bosco", "Rurl", "remotePackages", "bootstrap", varlist),file=fName)
 	  #cmd is the function ( ie. f(grid.input.Parameters.x[[1]])) which should be executed
-	  cmd <- "grid.batchFunction(grid.input.Parameters.x, fName, yName, varlist, scriptName, remScriptName, errName, condorName, batch, check, noCondor, remoteRPath, bosco, Rurl, remotePackages)"
+	  cmd <- "grid.batchFunction(grid.input.Parameters.x, fName, yName, varlist, scriptName, remScriptName, errName, condorName, batch, check, noCondor, remoteRPath, bosco, Rurl, remotePackages, bootstrap)"
   }
   else {
 	  save(list=c("grid.input.Parameters.x","grid.input.Parameters.f",varlist),file=fName)

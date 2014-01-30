@@ -15,7 +15,7 @@
 #	Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 `grid.init` <-
-		function(confFile=NULL, localTmpDir=NULL, verbose=TRUE, sshRemoteIp=NULL, sshUsername=NULL, sshRemoteDir=NULL, myProxyHost=NULL, myProxyUsername=NULL, credentialName=NULL, myProxyPwd=NULL, myProxyPort=NULL, service=NULL, sshKey=NULL, debug=FALSE, sharedDir=NULL, remoteRPath=NULL, schedulerIp=NULL, schedulerPort=NULL, Rurl=NULL, remotePackages=NULL){
+		function(confFile=NULL, localTmpDir=NULL, verbose=TRUE, sshRemoteIp=NULL, sshUsername=NULL, sshRemoteDir=NULL, myProxyHost=NULL, myProxyUsername=NULL, credentialName=NULL, myProxyPwd=NULL, myProxyPort=NULL, service=NULL, sshKey=NULL, debug=FALSE, sharedDir=NULL, remoteRPath=NULL, schedulerIp=NULL, schedulerPort=NULL, Rurl=NULL, remotePackages=NULL, bootstrap=NULL){
 	#delete old values
 	.grid$localDir=NULL
 	.grid$ssh$ip=NULL
@@ -37,6 +37,7 @@
 	.grid$schedulerIp=NULL
 	.grid$schedulerPort=NULL
     .grid$Rurl=NULL
+    .grid$bootstrap=NULL
 
     #load config file  
 	if(!exists(".grid", inherits=TRUE)){
@@ -229,6 +230,8 @@
 		.grid$schedulerIp=schedulerIp 
 	if(!is.null(schedulerPort))
 		.grid$schedulerPort=schedulerPort
+    if(!is.null(bootstrap))
+        .grid$bootstrap=bootstrap
 	
 	# if scheduler Ip is set, start GridR in SchedulerMode
 	if(!is.null(.grid$schedulerIp)){
