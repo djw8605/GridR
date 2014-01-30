@@ -53,15 +53,33 @@ function(plots, yName, psName, fName, remScriptName, remMainName,remMainNameOut,
 	remscript <- append(remscript,"\n q(runLast=FALSE)")
 	write.table(remscript,file=paste(remScriptName,sep=""),quote=FALSE,row.names=FALSE,col.names=FALSE)
 	if(!onlyssh && batch==FALSE) {
-	
+        executable <- .grid$remoteRPath
+        arguments <- "" 
+        
+        # If we want to bootstrap, build the arguments and package list
+        if (.grid$bootstrap == TRUE) {
+            executable <- system.file(package="GridR", "GridR", "R-bootstrap.py")
+            if ( !is.null(.grid$Rurl) ) {
+                arguments <- paste(" --url=", .grid$Rurl, sep="")
+            }
+            package_files <- ""
+            if ( !is.null(.grid$remotePackages) ) {
+                package_files <- paste(unlist(.grid$remotePackages), collapse=", ")
+                for (package in .grid$remotePackages) {
+                    arguments <- paste(arguments, " --package=", basename(package), sep="")
+                }
+            }
+            arguments <- paste(arguments, " -- ")
+        }
+    
 	  # create R script which submits the job to condor and waits until the file yName exists
-		remMainScript=paste("condorScript=paste(\"Executable     = ",.grid$remoteRPath,"
+		remMainScript=paste("condorScript=paste(\"Executable     = ",executable,"
 			Universe       = vanilla
 			should_transfer_files = YES
 			when_to_transfer_output = ON_EXIT
-			arguments      = \\\"CMD BATCH --vanilla --slave ",remScriptName,"\\\"
+			arguments      = ", arguments, "CMD BATCH --vanilla --slave ",remScriptName,"
 			Error          = ",errName,"
-			transfer_input_files =",remScriptName,",",fName,
+			transfer_input_files =",remScriptName,",",fName, ",",package_files, 
 			#"\ntransfer_files = ALWAYS",
 			"\nQueue\", sep=\"\")
 			write.table(condorScript,\"", condorName,"\",quote=FALSE,row.names=FALSE,col.names=FALSE)

@@ -1,7 +1,7 @@
 Package: GridR
 Type: Package
 Title: Executes functions on remote hosts, clusters or grids. 
-Version: 0.9.10
+Version: 0.9.11
 Date: 2014-01-28
 Author: Dennis Wegener, Malte Lohmeyer, Stefan Rueping, Derek Weitzel
 Maintainer: Dennis Wegener <dennis.wegener@iais.fraunhofer.de>
