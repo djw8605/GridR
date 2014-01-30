@@ -118,7 +118,6 @@ The function is to be submitted locallying to the machine running the R instance
 
 \code{remotePackages} lists the packages that should be installed on the remote execution host before starting the submitted function.  This can be useful when a function requires packages not part of the standard R distrubtion.  The packages in the list should be the full path to the source packages.
 }
-}
 
 \subsection{bosco.direct}{
 
