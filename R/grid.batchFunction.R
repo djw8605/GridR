@@ -64,7 +64,7 @@ function(grid.input.Parameters, fName, yName, varlist, scriptName, remScriptName
             }
             arguments <- paste(arguments, " -- ")
             executable <- system.file(package="GridR", "GridR", "R-bootstrap.py")
-            if (!bootstrap) {
+            if (!bootstrap && !bosco) {
                 arguments <- ""
                 package_files <- ""
                 executable <- remoteRPath
