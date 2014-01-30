@@ -58,7 +58,7 @@ function(plots, yName, psName, fName, remScriptName, remMainName,remMainNameOut,
         
         # If we want to bootstrap, build the arguments and package list
         if (.grid$bootstrap == TRUE) {
-            executable <- system.file(package="GridR", "GridR", "R-bootstrap.py")
+            executable <- system.file(package="GridR", "GridR", "R-bootstrap.py", mustWork=TRUE)
             if ( !is.null(.grid$Rurl) ) {
                 arguments <- paste(" --url=", .grid$Rurl, sep="")
             }
