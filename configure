@@ -1,7 +1,7 @@
 #!/bin/sh
 echo "By using the GridR package you agree to the listed terms and conditions below:"
 echo "#########################################"
-echo " 	GridR package 0.9.11"
+echo " 	GridR package 0.9.12"
 echo " "
 echo " "
 echo "Copyright (C) 2008 Fraunhofer Institute Intelligent Analysis and Information Systems IAIS," 

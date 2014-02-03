@@ -16,8 +16,8 @@ All needed functions and variables that are necessary to execute that function w
 \tabular{ll}{
 Package: \tab GridR\cr
 Type: \tab Package\cr
-Version: \tab 0.9.10\cr
-Date: \tab 2014-01-28\cr
+Version: \tab 0.9.12\cr
+Date: \tab 2014-02-03\cr
 License: \tab GPL-2\cr
 }
 With grid.init(...) GridR is initialized.
