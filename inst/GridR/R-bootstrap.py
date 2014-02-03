@@ -30,6 +30,7 @@ SUPPORTED_PLATFORMS = [ RH5, RH6, DEB6 ]
 # download URLs for the different platforms
 URL_DICT={
   DEB6: "http://osg-xsede.grid.iu.edu/software/boscor/deb6-modified.tar.gz",
+  DEB7: "http://osg-xsede.grid.iu.edu/software/boscor/deb6-modified.tar.gz",
   RH5: "http://osg-xsede.grid.iu.edu/software/boscor/el5-R-modified.tar.gz",
   RH6: "http://osg-xsede.grid.iu.edu/software/boscor/el6-R-modified.tar.gz",
   UNKNOWN: "UNKNOWN Platform"
@@ -128,6 +129,8 @@ def findversion():
       if mydist[0].lower() == 'debian':
         if mydist[1].startswith('6.'):
           return DEB6
+        elif mydist[1].startswith('7.'):
+          return DEB7
     if os.path.isfile('/etc/redhat-release'):
       return findversion_redhat()
     elif os.path.isfile('/etc/lsb-release'):
