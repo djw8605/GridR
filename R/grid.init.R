@@ -134,7 +134,7 @@
 			tag=substr(config[i],start[1]+1, end[1]-1) 
 			str=substr(config[i],start[2]+2, end[2]-1)
 			if(tag!=str) {
-				cat("Syntax error in confog file in line ", i, " start and end tag are different\n")
+				cat("Syntax error in config file in line ", i, " start and end tag are different\n")
 				return(FALSE)
 			}
 			
