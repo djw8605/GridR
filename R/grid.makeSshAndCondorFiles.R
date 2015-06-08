@@ -56,15 +56,18 @@ function(plots, yName, psName, fName, remScriptName, remMainName,remMainNameOut,
         executable <- .grid$remoteRPath
         arguments <- "" 
         
+        
+        package_files <- ""
         # If we want to bootstrap, build the arguments and package list
         if (.grid$bootstrap == TRUE) {
             executable <- system.file(package="GridR", "GridR", "R-bootstrap.py", mustWork=TRUE)
             if ( !is.null(.grid$Rurl) ) {
                 arguments <- paste(" --url=", .grid$Rurl, sep="")
             }
-            package_files <- ""
+        
             if ( !is.null(.grid$remotePackages) ) {
                 package_files <- paste(unlist(.grid$remotePackages), collapse=", ")
+                package_files <- paste0(",", package_files)
                 for (package in .grid$remotePackages) {
                     arguments <- paste(arguments, " --package=", basename(package), sep="")
                 }
@@ -79,7 +82,7 @@ function(plots, yName, psName, fName, remScriptName, remMainName,remMainNameOut,
 			when_to_transfer_output = ON_EXIT
 			arguments      = ", arguments, "CMD BATCH --vanilla --slave ",remScriptName,"
 			Error          = ",errName,"
-			transfer_input_files =",remScriptName,",",fName, ",",package_files, 
+			transfer_input_files =", remScriptName, ",", fName, package_files, 
 			#"\ntransfer_files = ALWAYS",
 			"\nQueue\", sep=\"\")
 			write.table(condorScript,\"", condorName,"\",quote=FALSE,row.names=FALSE,col.names=FALSE)
